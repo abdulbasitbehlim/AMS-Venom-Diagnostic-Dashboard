@@ -30,7 +30,7 @@ Venom concentrations are generated randomly on each run to demonstrate character
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/YourUsername/YourRepoName.git
+   git clone https://github.com/abdulbasitbehlim/YourRepoName.git
    cd YourRepoName
    ```
 
