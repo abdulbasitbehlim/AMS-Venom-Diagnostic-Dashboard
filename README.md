@@ -31,7 +31,7 @@ Venom concentrations are generated randomly on each run to demonstrate character
 1. Clone the repository:
    ```bash
    git clone https://github.com/abdulbasitbehlim/YourRepoName.git
-   cd YourRepoName
+   cd AMS-Venom-Diagnostic-Dashboard
    ```
 
 2. Install the required packages:
