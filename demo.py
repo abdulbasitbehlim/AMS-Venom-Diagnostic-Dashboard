@@ -4,11 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
 
-
-# ------------------------------------------------------------
-# 1. PAGE SETUP
-# ------------------------------------------------------------
-
 st.set_page_config(
     page_title="AMS Venom Diagnostic Dashboard",
     layout="wide"
@@ -30,36 +25,20 @@ validated AMS Venomics diagnostic device**.
 """
 )
 
-
-# ------------------------------------------------------------
-# 2. SIDEBAR CONTROLS
-# ------------------------------------------------------------
-
 st.sidebar.header("Dashboard Controls")
 st.sidebar.write(
     "Filter the sensor data by selecting specific snake species:"
 )
 
-# Clicking this button restarts the Streamlit script,
-# which generates a fresh set of random amplitudes.
 if st.sidebar.button("Generate New Random Data"):
     st.rerun()
 
-
-# ------------------------------------------------------------
-# 3. CREATE RANDOM DEMONSTRATION DATA
-# ------------------------------------------------------------
-
-# Each species receives a random signal amplitude.
-# These numbers are only for simulation.
 amp_cobra = random.randint(10, 55)
 amp_krait = random.randint(10, 35)
 amp_russell = random.randint(20, 65)
 amp_saw = random.randint(5, 30)
 amp_king = random.randint(10, 30)
 
-
-# Store the information for every species in one dictionary.
 snake_data = {
     "Spectacled Cobra": {
         "amplitude": amp_cobra,
@@ -103,11 +82,6 @@ snake_data = {
     }
 }
 
-
-# ------------------------------------------------------------
-# 4. LET THE USER CHOOSE WHICH SPECIES TO SHOW
-# ------------------------------------------------------------
-
 selected_species = []
 
 for species_name in snake_data:
@@ -116,12 +90,6 @@ for species_name in snake_data:
     if is_selected:
         selected_species.append(species_name)
 
-
-# ------------------------------------------------------------
-# 5. PREPARE THE TIME AXIS AND BASELINE NOISE
-# ------------------------------------------------------------
-
-# Create 1000 points from 0 to 100 seconds.
 time = np.linspace(0, 100, 1000)
 
 noise_level = st.sidebar.slider(
@@ -132,17 +100,11 @@ noise_level = st.sidebar.slider(
     step=0.1
 )
 
-# Create random baseline noise for the whole signal.
 baseline_noise = np.random.normal(
     0,
     noise_level,
     size=len(time)
 )
-
-
-# ------------------------------------------------------------
-# 6. BUILD AND PLOT EACH SYNTHETIC SIGNAL
-# ------------------------------------------------------------
 
 fig, ax = plt.subplots(figsize=(12, 6))
 
@@ -156,15 +118,13 @@ for species_name in selected_species:
     left_width = species["w_left"]
     right_width = species["w_right"]
 
-    # Use one width before the peak and another width after the peak.
-    # This produces an asymmetric Gaussian-like signal.
+    # Use different widths on each side to create an asymmetric peak.
     width_array = np.where(
         time < peak_time,
         left_width,
         right_width
     )
 
-    # Gaussian equation used to create the simulated binding peak.
     distance_from_peak = time - peak_time
     squared_distance = distance_from_peak ** 2
     squared_width = width_array ** 2
@@ -172,7 +132,6 @@ for species_name in selected_species:
     exponent = -squared_distance / (2 * squared_width)
     binding_peak = amplitude * np.exp(exponent)
 
-    # Add the simulated peak on top of the baseline sensor noise.
     total_signal = baseline_noise + binding_peak
 
     ax.plot(
@@ -183,7 +142,6 @@ for species_name in selected_species:
         linewidth=2.5
     )
 
-    # Show the illustrative concentration near the top of the peak.
     label_height = amplitude + noise_level + 1
 
     ax.annotate(
@@ -195,11 +153,6 @@ for species_name in selected_species:
         fontweight="bold",
         fontsize=11
     )
-
-
-# ------------------------------------------------------------
-# 7. FORMAT THE GRAPH
-# ------------------------------------------------------------
 
 ax.set_title(
     "Synthetic Sensor Signal Simulation",
@@ -222,11 +175,6 @@ ax.grid(
     alpha=0.6
 )
 
-
-# ------------------------------------------------------------
-# 8. DISPLAY THE RESULT IN STREAMLIT
-# ------------------------------------------------------------
-
 st.pyplot(fig)
 
 if selected_species:
@@ -239,6 +187,4 @@ else:
         "Select at least one species to display simulated signal traces."
     )
 
-
-# Run this project locally using:
-# streamlit run demo.py
+# Run locally with: streamlit run demo.py
